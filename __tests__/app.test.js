@@ -21,7 +21,7 @@ describe.only("GET /api/topics", () => {
         return request(app)
         .get("/api/topics")
         .expect(200)
-        .then (({ body}) => {
+        .then (({ body}) => { 
             expect(Array.isArray(body.topics)).toBe(true)
             expect(body.topics.length).toBeGreaterThan(0)
             expect(body.topics.every(item => item.hasOwnProperty('slug') && item.hasOwnProperty('description'))).toBe(true);
