@@ -31,7 +31,18 @@ describe("GET /api/topics", () => {
     });
 }) 
 
-describe('GET error tests', () => {
+describe("GET /api endpoints ", () => {
+    test('Should respond with an object of available endPoints and their useful info', () => {
+        return request(app)
+        .get('/api')
+        .expect(200)
+        .then((response) => {
+            expect(response.body).toEqual({ endPoints })
+        })
+    });
+})
+
+describe('GET /api endpoints 404: non existant end point test', () => {
     test('404: should respond with an error for a non existing end point ', () => {
         return request(app)
         .get('/api/incorrect')
@@ -41,16 +52,47 @@ describe('GET error tests', () => {
         })
         
     });
+
 })
 
-describe("GET /api endpoints ", () => {
-    test('Should respond with an object of available endPoints and their useful info', () => {
-        return request(app)
-        .get('/api')
-        .expect(200)
-        .then((response) => {
-            expect(response.body).toEqual({ endPoints })
+
+describe('GET /api/articles/:article_id', () => {
+    test('Returns the correct article when given a valid id', () => {
+       return request(app) 
+       .get('/api/articles/1')
+       .expect(200)
+       .then(({ body }) => {
+        expect(body.article).toEqual({
+            article_id: 1,
+            title: "Living in the shadow of a great man",
+            topic: "mitch",
+            author: "butter_bridge",
+            body: "I find this existence challenging",
+            created_at: "2020-07-09T20:11:00.000Z",
+            votes: 100,
+            article_img_url:
+      "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
         })
+       })
+    });
+})
+
+describe('GET /api/articles/:article_id errors', () => {
+    test('404: responds with error when article_id does not exist', () => {
+       return request(app)
+       .get('/api/articles/99999999')
+       .expect(404)
+       .then(({ body }) => {
+        expect(body.message).toBe('Bad path, not found!')
+       })
+    });
+    test('400: responds with an error when article_id invalid', () => {
+        return request(app)
+        .get('/api/articles/five')
+        .expect(400)
+        .then(({ body }) => {
+         expect(body.message).toBe('Invalid input')
+        })   
     });
 })
 
