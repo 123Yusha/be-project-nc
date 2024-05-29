@@ -7,6 +7,7 @@ const articleData = require("../db/data/test-data/articles.js")
 const commentData = require("../db/data/test-data/comments.js")
 const request = require("supertest")
 const { endPoints } = require("../endpoints.json")
+const sorted = require("jest-sorted")
 
 beforeEach(() => {
     return seed({ topicData, userData, articleData, commentData })
@@ -96,6 +97,50 @@ describe('GET /api/articles/:article_id errors', () => {
     });
 })
 
+describe("GET /api/articles", () => {
+
+    test('200: responds with an array of articles ', () => {
+        return request(app)
+        .get("/api/articles")
+        .expect(200)
+        .then (({ body}) => { 
+            expect(Array.isArray(body.articles)).toBe(true)
+            expect(body.articles.length).toBe(13)
+            body.articles.forEach(article => {
+                expect(article).toHaveProperty('author');
+                expect(article).toHaveProperty('title');
+                expect(article).toHaveProperty('article_id');
+                expect(article).toHaveProperty('topic');
+                expect(article).toHaveProperty('created_at');
+                expect(article).toHaveProperty('votes');
+                expect(article).toHaveProperty('article_img_url');
+                expect(article).toHaveProperty('comment_count');  
+            })
+         })
+    })
+    test('200: responds with an array of articles sorted by created_at in descending order ', () => {
+        return request(app)
+        .get("/api/articles")
+        .expect(200)
+        .then(({ body }) => {
+        expect(body.articles).toBeSortedBy('created_at', {descending: true})
+        
+        })
+    });
+}) 
+
+describe("GET /api/articles errors", () => {
+    test('404: should respond with an error for a non existing end point ', () => {
+        return request(app)
+        .get('/api/aaarticles')
+        .expect(404)
+        .then(({body}) => {
+            expect(body.message).toBe("Bad path, not found!")
+        })
+        
+    });
+
+})
 
 
 
