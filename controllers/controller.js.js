@@ -1,4 +1,4 @@
-const { selectTopics, selectArticleById, selectAllArticles, selectCommentsByArticleId } = require("../models/models")
+const { selectTopics, selectArticleById, selectAllArticles, selectCommentsByArticleId, insertCommentByArticleId } = require("../models/models")
 const { endPoints } = require("../endpoints.json")
 
 exports.getAllTopics = (req,res) => {
@@ -44,6 +44,28 @@ selectArticleById(article_id).then(() => {
     next(err)
 })
 }
+
+exports.postCommentByArticleId = (req,res,next) => {
+const { article_id } = req.params
+const {username, body } = req.body
+if(!username || !body) {
+    return next({
+        status: 400,
+        msg: 'Required key missing'
+    });
+}
+selectArticleById(article_id)
+        .then(() => {
+            return insertCommentByArticleId(article_id, username, body);
+        })
+        .then(comment => {
+            console.log(comment)
+            res.status(200).send({ comment });
+        })
+        .catch(err => {
+            next(err);
+        });
+};
 
 
 

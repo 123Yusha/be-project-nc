@@ -59,7 +59,7 @@ describe('GET /api endpoints 404: non existant end point test', () => {
 
 describe('GET /api/articles/:article_id', () => {
     test('Returns the correct article when given a valid id', () => {
-       return request(app) 
+       return request(app)
        .get('/api/articles/1')
        .expect(200)
        .then(({ body }) => {
@@ -167,12 +167,12 @@ test('Responds with a correct array of comments when given a valid article_id', 
           }])
     }) 
 });
-test('200: responds with an array of articles sorted by most recent comments first ', () => {
+test('200: responds with an array of comments by article_id sorted by most recent comments first ', () => {
     return request(app)
-    .get("/api/articles/")
+    .get("/api/articles/1/comments")
     .expect(200)
     .then(({ body }) => {
-    expect(body.articles).toBeSortedBy('created_at', {descending: true})
+    expect(body.comments).toBeSortedBy('created_at', {descending: true})
     
     })
 });
@@ -198,6 +198,87 @@ describe('GET /api/articles/:article_id/comments ERRORS', () => {
      });
 }
 )
+
+describe('POST /api/articles/:article_id/comments', () => {
+test('Should add a new comment for a valid article_id ', () => {
+
+    const newComment = {
+        username: 'butter_bridge',
+        body: 'Test Comment'
+    }
+    return request(app)
+            .post('/api/articles/1/comments')
+            .send(newComment)
+            .expect(200)
+            .then(response => {
+                expect(response.body.comment).toBeTruthy();
+                expect(response.body.comment.author).toBe(newComment.username);
+                expect(response.body.comment.body).toBe(newComment.body);
+     })
+});
+
+
+})
+
+describe('POST /api/articles/:article_id/comments ERRORS', () => {
+    test('400: return error if missing username or body', () => {
+        const invalidComment = {body: 'Test comment'};
+    
+        return request(app)
+          .post('/api/articles/1/comments')
+          .send(invalidComment)
+          .expect(400)
+          .then(response => {
+            expect(response.body).toEqual({ message: 'Required key missing' });
+          });
+      });
+      test('400: return error if article_id is invalid input', () => {
+        const commentData = {
+            username: 'Yusha',
+            body: 'Test comment'
+          };
+    
+        return request(app)
+          .post('/api/articles/one/comments')
+          .send(commentData)
+          .expect(400)
+          .then(response => {
+            expect(response.body).toEqual({ message: 'Invalid input' });
+          });
+      });
+
+      test('should return 404 if article ID does not exist', () => {
+        const commentData = {
+          username: 'Yusha',
+          body: 'Test comment'
+        };
+    
+        return request(app)
+          .post('/api/articles/123456/comments')
+          .send(commentData)
+          .expect(404)
+          .then(response => {
+            expect(response.body).toEqual({ message: 'Article does not exist' });
+          });
+      });
+      test('should return 404 if username does not exist', () => {
+        const commentData = {
+          username: 'Yusha',
+          body: 'Test comment'
+        };
+    
+        return request(app)
+          .post('/api/articles/123456/comments')
+          .send(commentData)
+          .expect(404)
+          .then(response => {
+            expect(response.body).toEqual({ message: 'Article does not exist' });
+          });
+      });
+      
+})
+
+
 
 
 
