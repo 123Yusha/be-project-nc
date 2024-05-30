@@ -78,13 +78,13 @@ describe('GET /api/articles/:article_id', () => {
     });
 })
 
-describe('GET /api/articles/:article_id errors', () => {
+describe('GET /api/articles/:article_id ERRORS', () => {
     test('404: responds with error when article_id does not exist', () => {
        return request(app)
        .get('/api/articles/99999999')
        .expect(404)
        .then(({ body }) => {
-        expect(body.message).toBe('Bad path, not found!')
+        expect(body.message).toBe('Article does not exist')
        })
     });
     test('400: responds with an error when article_id invalid', () => {
@@ -129,7 +129,7 @@ describe("GET /api/articles", () => {
     });
 }) 
 
-describe("GET /api/articles errors", () => {
+describe("GET /api/articles ERRORS", () => {
     test('404: should respond with an error for a non existing end point ', () => {
         return request(app)
         .get('/api/aaarticles')
@@ -141,6 +141,63 @@ describe("GET /api/articles errors", () => {
     });
 
 })
+
+describe('GET /api/articles/:article_id/comments', () => {
+test('200: Responds with an ampty array if the id exists, but there are no comments', () => {
+    return request(app)
+    .get("/api/articles/2/comments")
+    .expect(200)
+    .then(({ body }) => {
+        expect(body.comments).toEqual([])
+    })
+    });
+test('Responds with a correct array of comments when given a valid article_id', () => {
+    return request(app)
+    .get('/api/articles/6/comments')
+    .expect(200)
+    .then(({ body }) => {
+        const { comments } = body
+        expect(comments).toEqual([{
+            comment_id: 16 ,
+            body: "This is a bad article name",
+            votes: 1,
+            author: "butter_bridge",
+            article_id: 6,
+            created_at: "2020-10-11T15:23:00.000Z"
+          }])
+    }) 
+});
+test('200: responds with an array of articles sorted by most recent comments first ', () => {
+    return request(app)
+    .get("/api/articles/")
+    .expect(200)
+    .then(({ body }) => {
+    expect(body.articles).toBeSortedBy('created_at', {descending: true})
+    
+    })
+});
+}
+)
+
+describe('GET /api/articles/:article_id/comments ERRORS', () => {
+    test('404: responds with error when article id does not exist', () => {
+        return request(app)
+        .get('/api/articles/9999999/comments')
+        .expect(404)
+        .then((response) => {
+    expect(response.body.message).toBe('Article does not exist')
+        })
+     });
+     test('400: responds with an error when article_id invalid', () => {
+         return request(app)
+         .get('/api/articles/"five"/comments')
+         .expect(400)
+         .then(({ body }) => {
+          expect(body.message).toBe('Invalid input')
+         })   
+     });
+}
+)
 
 
 
