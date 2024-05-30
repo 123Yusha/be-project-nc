@@ -278,6 +278,48 @@ describe('POST /api/articles/:article_id/comments ERRORS', () => {
       
 })
 
+describe('PATCH /api/articles/:article_id', () => {
+    test('updates valid article_id votes with valid inc_votes value', () => {
+        return request(app)
+            .patch('/api/articles/1')
+            .send({ inc_votes: 10 })
+            .expect(200)
+            .then(response => {
+                expect(response.body.article.votes).toBe(110);
+            })
+    });
+})
+
+describe('PATCH /api/articles/:article_id ERRORS', () => {
+    test('404: returns error if article_id does not exist', () => {
+        return request(app)
+            .patch('/api/articles/999999')
+            .send({ inc_votes: 10 })
+            .expect(404);
+    });
+    test('400: returns error if article_id is invalid format', () => {
+        return request(app)
+            .patch('/api/articles/one')
+            .send({ inc_votes: 10 })
+            .expect(400);
+    });
+    test('400: returns error if inc_votes is invalid format or missing', () => {
+        return request(app)
+            .patch('/api/articles/1')
+            .expect(400)
+            .then(() => {
+                return request(app)
+                    .patch('/api/articles/1')
+                    .send({ inc_votes: 'invalid vote format' })
+                    .expect(400);
+            });
+    });
+
+})
+
+
+
+
 
 
 

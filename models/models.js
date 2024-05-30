@@ -55,4 +55,24 @@ exports.insertCommentByArticleId = (article_id, username, body) => {
     });
 };
 
+exports.updateArticleVotesById = (article_id, inc_votes) => {
+    return db.query(
+        `UPDATE articles
+         SET votes = votes + $2
+         WHERE article_id = $1
+         RETURNING *`,
+        [article_id, inc_votes]
+    ).then(({ rows }) => {
+        const article = rows[0]
+        if (!article) {
+            return Promise.reject({
+                status: 404,
+                msg: 'Article does not exist'
+            });
+        }
+        return rows[0];
+    });
+};
+
+
    
