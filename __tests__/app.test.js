@@ -182,7 +182,7 @@ test('200: responds with an array of articles sorted by most recent comments fir
 describe('GET /api/articles/:article_id/comments ERRORS', () => {
     test('404: responds with error when article id does not exist', () => {
         return request(app)
-        .get('/api/articles/9999999/comments')
+        .get('/api/articles/999999/comments')
         .expect(404)
         .then((response) => {
     expect(response.body.message).toBe('Article does not exist')
