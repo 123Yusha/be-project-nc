@@ -167,12 +167,12 @@ test('Responds with a correct array of comments when given a valid article_id', 
           }])
     }) 
 });
-test('200: responds with an array of articles sorted by most recent comments first ', () => {
+test('200: responds with an array of comments by article_id sorted by most recent comments first ', () => {
     return request(app)
-    .get("/api/articles/")
+    .get("/api/articles/1/comments")
     .expect(200)
     .then(({ body }) => {
-    expect(body.articles).toBeSortedBy('created_at', {descending: true})
+    expect(body.comments).toBeSortedBy('created_at', {descending: true})
     
     })
 });

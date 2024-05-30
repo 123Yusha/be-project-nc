@@ -1,4 +1,4 @@
-const { selectTopics, selectArticleById, selectAllArticles, selectCommentsByArticleId } = require("../models/models")
+const { selectTopics, selectArticleById, selectAllArticles, selectCommentsByArticleId, insertCommentByArticleId } = require("../models/models")
 const { endPoints } = require("../endpoints.json")
 
 exports.getAllTopics = (req,res) => {
@@ -39,6 +39,21 @@ selectArticleById(article_id).then(() => {
 })
 .then((comments) => {
     res.status(200).send({ comments })
+})
+.catch((err) => {
+    next(err)
+})
+}
+
+exports.postCommentByArticleId = (req,res,next) => {
+const { article_id } = req.params
+const {username, body } = req.body
+if(!username || !body) {
+    return res.status(400).send({msg: 'username and body fields required'})
+}
+insertCommentByArticleId(article_id, username, body)
+.then((comment) => {
+    res.status(200).send({ comment })
 })
 .catch((err) => {
     next(err)
