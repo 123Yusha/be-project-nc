@@ -2,6 +2,8 @@ const express = require('express')
 const app = express()
 const { getAllTopics, getAllEndpoints, getArticleById, getAllArticles, getCommentsByArticleId, postCommentByArticleId } = require("./controllers/controller.js")
 
+app.use(express.json())
+
 app.get('/api/topics', getAllTopics)
 
 app.get('/api', getAllEndpoints)
@@ -20,9 +22,11 @@ app.post('/api/articles/:article_id/comments', postCommentByArticleId)
     res.status(404).send({ message: "Bad path, not found!" })
   });
 
+
   app.use((err, req, res, next) => {
-  
+  console.log(err)
     if (err.status) {
+    
         res.status(err.status).send({ message: err.msg });
     } else if (err.code === '22P02') {
         res.status(400).send({ message: "Invalid input" });

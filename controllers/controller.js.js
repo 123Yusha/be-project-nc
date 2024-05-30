@@ -49,16 +49,23 @@ exports.postCommentByArticleId = (req,res,next) => {
 const { article_id } = req.params
 const {username, body } = req.body
 if(!username || !body) {
-    return res.status(400).send({msg: 'username and body fields required'})
+    return next({
+        status: 400,
+        msg: 'Required key missing'
+    });
 }
-insertCommentByArticleId(article_id, username, body)
-.then((comment) => {
-    res.status(200).send({ comment })
-})
-.catch((err) => {
-    next(err)
-})
-}
+selectArticleById(article_id)
+        .then(() => {
+            return insertCommentByArticleId(article_id, username, body);
+        })
+        .then(comment => {
+            console.log(comment)
+            res.status(200).send({ comment });
+        })
+        .catch(err => {
+            next(err);
+        });
+};
 
 
 
