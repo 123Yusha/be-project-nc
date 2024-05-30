@@ -1,4 +1,4 @@
-const { selectTopics, selectArticleById, selectAllArticles } = require("../models/models")
+const { selectTopics, selectArticleById, selectAllArticles, selectCommentsByArticleId } = require("../models/models")
 const { endPoints } = require("../endpoints.json")
 
 exports.getAllTopics = (req,res) => {
@@ -19,17 +19,26 @@ exports.getArticleById = (req,res,next) => {
     selectArticleById(article_id).then((article) => 
     res.status(200).send( { article }))
 .catch((err) => {
-    if (err.status === 404) {
-        res.status(404).send({message: "Bad path, not found!"})
-    } else {
         next(err)
-    }
     })
     }
 
 exports.getAllArticles = (req,res,next) => {
 selectAllArticles().then((articles) => {
     res.status(200).send({ articles })
+})
+.catch((err) => {
+    next(err)
+})
+}
+
+exports.getCommentsByArticleId = (req,res,next) => {
+const { article_id } = req.params
+selectArticleById(article_id).then(() => {
+   return selectCommentsByArticleId(article_id)
+})
+.then((comments) => {
+    res.status(200).send({ comments })
 })
 .catch((err) => {
     next(err)
