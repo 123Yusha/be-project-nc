@@ -63,10 +63,11 @@ exports.updateArticleVotesById = (article_id, inc_votes) => {
          RETURNING *`,
         [article_id, inc_votes]
     ).then(({ rows }) => {
-        if (rows.length === 0) {
+        const article = rows[0]
+        if (!article) {
             return Promise.reject({
                 status: 404,
-                msg: 'Article not found'
+                msg: 'Article does not exist'
             });
         }
         return rows[0];
