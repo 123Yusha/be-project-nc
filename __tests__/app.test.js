@@ -344,6 +344,29 @@ describe('DELETE /api/comments/:comment_id ERRORS', () => {
     });
 })
 
+describe("GET /api/users", () => {
+
+    test('200: responds with an array of users ', () => {
+        return request(app)
+        .get("/api/users")
+        .expect(200)
+        .then (({ body}) => { 
+            expect(Array.isArray(body.users)).toBe(true)
+            expect(body.users.length).toBe(4)
+            expect(body.users.every(item => item.hasOwnProperty('username') && item.hasOwnProperty('avatar_url') && item.hasOwnProperty('name'))).toBe(true);
+
+        })
+    });
+    test('404: should respond with an error for a non existing end point ', () => {
+        return request(app)
+        .get('/api/incorrectusers')
+        .expect(404)
+        .then(({body}) => {
+            expect(body.message).toBe("Bad path, not found!")
+        })
+        
+    });
+}) 
 
 
 
