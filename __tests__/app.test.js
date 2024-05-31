@@ -209,7 +209,7 @@ test('Should add a new comment for a valid article_id ', () => {
     return request(app)
             .post('/api/articles/1/comments')
             .send(newComment)
-            .expect(200)
+            .expect(201)
             .then(response => {
                 expect(response.body.comment).toBeTruthy();
                 expect(response.body.comment.author).toBe(newComment.username);
@@ -234,7 +234,7 @@ describe('POST /api/articles/:article_id/comments ERRORS', () => {
       });
       test('400: return error if article_id is invalid input', () => {
         const commentData = {
-            username: 'Yusha',
+            username: 'butter_bridge',
             body: 'Test comment'
           };
     
@@ -249,7 +249,7 @@ describe('POST /api/articles/:article_id/comments ERRORS', () => {
 
       test('should return 404 if article ID does not exist', () => {
         const commentData = {
-          username: 'Yusha',
+          username: 'butter_bridge',
           body: 'Test comment'
         };
     
