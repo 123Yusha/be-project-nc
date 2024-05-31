@@ -1,4 +1,4 @@
-const { selectTopics, selectArticleById, selectAllArticles, selectCommentsByArticleId, insertCommentByArticleId, updateArticleVotesById } = require("../models/models")
+const { selectTopics, selectArticleById, selectAllArticles, selectCommentsByArticleId, insertCommentByArticleId, updateArticleVotesById, extractCommentById } = require("../models/models")
 const { endPoints } = require("../endpoints.json")
 
 exports.getAllTopics = (req,res) => {
@@ -84,6 +84,17 @@ exports.patchArticleById = (req, res, next) => {
             next(err);
         });
 };
+
+exports.deleteCommentById = (req, res, next) => {
+    const { comment_id } = req.params
+    extractCommentById(comment_id)
+    .then(() => {
+        res.status(204).end() 
+    })
+    .catch((err) => {
+        next(err)
+    })
+}
 
 
 

@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-const { getAllTopics, getAllEndpoints, getArticleById, getAllArticles, getCommentsByArticleId, postCommentByArticleId, patchArticleById } = require("./controllers/controller.js")
+const { getAllTopics, getAllEndpoints, getArticleById, getAllArticles, getCommentsByArticleId, postCommentByArticleId, patchArticleById, deleteCommentById } = require("./controllers/controller.js")
 
 app.use(express.json())
 
@@ -18,15 +18,15 @@ app.post('/api/articles/:article_id/comments', postCommentByArticleId)
 
 app.patch('/api/articles/:article_id', patchArticleById)
 
+app.delete('/api/comments/:comment_id', deleteCommentById)
 
 
-  app.all("*",(req, res) => {
+app.all("*",(req, res) => {
     res.status(404).send({ message: "Bad path, not found!" })
   });
 
 
   app.use((err, req, res, next) => {
-  console.log(err)
     if (err.status) {
     
         res.status(err.status).send({ message: err.msg });
