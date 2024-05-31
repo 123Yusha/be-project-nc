@@ -88,5 +88,9 @@ exports.extractCommentById = (comment_id) => {
     })
 }
 
-
+exports.selectUsers = () => {
+    return db.query('SELECT * FROM users').then((response) => {
+        return response.rows
+    })
+}
    
