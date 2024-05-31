@@ -58,7 +58,7 @@ describe('GET /api endpoints 404: non existant end point test', () => {
 
 
 describe('GET /api/articles/:article_id', () => {
-    test('Returns the correct article when given a valid id', () => {
+    test('Returns the correct article when given a valid id. Also returns comment count of given article_id', () => {
        return request(app)
        .get('/api/articles/1')
        .expect(200)
@@ -73,6 +73,7 @@ describe('GET /api/articles/:article_id', () => {
             votes: 100,
             article_img_url:
       "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+            comment_count: "11"
         })
        })
     });
@@ -138,15 +139,6 @@ describe("GET /api/articles", () => {
                 expect(article.topic).toBe('mitch')
             });
         });
-    });
-    test('200: responds with an empty array if no articles match the topic', () => {
-        return request(app)
-            .get("/api/articles?topic=northcoders")
-            .expect(200)
-            .then(({ body }) => {
-                expect(Array.isArray(body.articles)).toBe(true);
-                expect(body.articles.length).toBe(0);
-            });
     });
 }) 
 

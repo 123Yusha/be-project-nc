@@ -21,7 +21,7 @@ exports.getArticleById = (req,res,next) => {
 .catch((err) => {
         next(err)
     })
-    }
+}
 
 exports.getAllArticles = (req,res,next) => {
 const { topic } = req.query;
@@ -74,7 +74,7 @@ selectArticleById(article_id)
         .catch(err => {
             next(err);
         });
-};
+}
 
 exports.patchArticleById = (req, res, next) => {
     const { article_id } = req.params;
@@ -92,7 +92,7 @@ exports.patchArticleById = (req, res, next) => {
         .catch((err) => {
             next(err);
         });
-};
+}
 
 exports.deleteCommentById = (req, res, next) => {
     const { comment_id } = req.params
