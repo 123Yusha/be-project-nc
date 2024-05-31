@@ -127,6 +127,27 @@ describe("GET /api/articles", () => {
         
         })
     });
+    test('200: responds with an array of articles filtered by topic query', () => {
+        return request(app)
+        .get("/api/articles?topic=mitch")
+        .expect(200)
+        .then(({ body }) => {
+            expect(Array.isArray(body.articles)).toBe(true)
+            expect(body.articles.length).toBe(12)
+            body.articles.forEach(article => {
+                expect(article.topic).toBe('mitch')
+            });
+        });
+    });
+    test('200: responds with an empty array if no articles match the topic', () => {
+        return request(app)
+            .get("/api/articles?topic=northcoders")
+            .expect(200)
+            .then(({ body }) => {
+                expect(Array.isArray(body.articles)).toBe(true);
+                expect(body.articles.length).toBe(0);
+            });
+    });
 }) 
 
 describe("GET /api/articles ERRORS", () => {
@@ -367,6 +388,8 @@ describe("GET /api/users", () => {
         
     });
 }) 
+
+
 
 
 

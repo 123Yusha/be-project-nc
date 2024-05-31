@@ -24,12 +24,21 @@ exports.getArticleById = (req,res,next) => {
     }
 
 exports.getAllArticles = (req,res,next) => {
-selectAllArticles().then((articles) => {
-    res.status(200).send({ articles })
-})
-.catch((err) => {
-    next(err)
-})
+const { topic } = req.query;
+let articlePromise;
+
+if(topic) {
+    articlePromise = selectAllArticles(topic)
+} else {articlePromise = selectAllArticles()
+
+}
+articlePromise
+        .then((articles) => {
+            res.status(200).send({ articles });
+        })
+        .catch((err) => {
+            next(err);
+        });
 }
 
 exports.getCommentsByArticleId = (req,res,next) => {
