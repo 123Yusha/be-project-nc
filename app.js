@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
 const { getAllTopics, getAllEndpoints, getArticleById, getAllArticles, getCommentsByArticleId, postCommentByArticleId, patchArticleById, deleteCommentById, getAllUsers } = require("./controllers/controller.js")
+const connection = require('./db/connection.js')
 
 app.use(express.json())
 
