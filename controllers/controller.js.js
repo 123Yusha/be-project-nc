@@ -1,5 +1,5 @@
 const { selectTopics, selectArticleById, selectAllArticles, selectCommentsByArticleId, insertCommentByArticleId, updateArticleVotesById, extractCommentById, selectUsers } = require("../models/models")
-const { endPoints } = require("../endpoints.json")
+const endPoints = require("../endpoints.json")
 
 exports.getAllTopics = (req,res) => {
     selectTopics().then((topics) => {
@@ -11,6 +11,7 @@ next(err)
 }
 
 exports.getAllEndpoints = (req,res) => {
+
     res.status(200).send({ endPoints })
 }
 

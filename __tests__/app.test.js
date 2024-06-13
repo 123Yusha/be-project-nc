@@ -6,7 +6,7 @@ const userData = require("../db/data/test-data/users.js")
 const articleData = require("../db/data/test-data/articles.js")
 const commentData = require("../db/data/test-data/comments.js")
 const request = require("supertest")
-const { endPoints } = require("../endpoints.json")
+const endPoints = require("../endpoints.json")
 const sorted = require("jest-sorted")
 
 beforeEach(() => {
@@ -38,7 +38,7 @@ describe("GET /api endpoints ", () => {
         .get('/api')
         .expect(200)
         .then((response) => {
-            expect(response.body).toEqual({ endPoints })
+            expect(response.body.endPoints).toEqual(endPoints)
         })
     });
 })
