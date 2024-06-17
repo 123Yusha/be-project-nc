@@ -1,5 +1,8 @@
 # Northcoders News API
-This projects purpose is to act as a backend API for "Northcoders News", a reddit style news feed app.
+This projects purpose is to act as a backend API for "Northcoders News", a reddit style news feed app. The Api can be accessed by clicking on this link: 
+
+https://be-project-nc.onrender.com/api
+
 To run this project locally, please add the following environment variables:
 
 PGDATABASE=nc_news 
