@@ -12,7 +12,9 @@ const {
   getAllUsers,
 } = require("./controllers/controller.js");
 const connection = require("./db/connection.js");
+const cors = require('cors');
 
+app.use(cors());
 app.use(express.json());
 
 app.get("/api/topics", getAllTopics);
